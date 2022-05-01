@@ -4,12 +4,83 @@ import GetVirtualMachineLists from "./main/virtualmachine/VirtualMachineList";
 import AppService from "./main/pages/AppService";
 import Home from "./main/pages/Home";
 import VirtualMachines from "./main/pages/VirtualMachines";
+import { SignInButton } from "./components/SignInButton";
+import {useIsAuthenticated, AuthenticatedTemplate, UnauthenticatedTemplate, useMsal} from "@azure/msal-react";
+import {SignOutButton} from "./components/SignOutButton";
+// @ts-ignore
+import { loginRequest } from "./authConfig";
+import Button from "react-bootstrap/Button";
+
+
+
+const ProfileContent = () => {
+    const { instance, accounts, inProgress } = useMsal();
+    const [accessToken, setAccessToken] = useState(null);
+
+    const name = accounts[0] && accounts[0].name;
+
+    function RequestAccessToken() {
+        const request = {
+            ...loginRequest,
+            account: accounts[0]
+        };
+
+        // Silently acquires an access token which is then attached to a request for Microsoft Graph data
+        instance.acquireTokenSilent(request).then((response) => {
+            const at = response.accessToken
+            // @ts-ignore
+            setAccessToken(at);
+            console.log(response)
+        }).catch((e) => {
+            instance.acquireTokenPopup(request).then((response) => {
+                const at = response.accessToken
+                // @ts-ignore
+                setAccessToken(at);
+                console.log(response)
+            });
+        });
+    }
+
+    return (
+        <>
+            <h5 className="card-title">Welcome {name}</h5>
+            {accessToken ?
+                <p>Access Token Acquired!</p>
+                :
+                <Button variant="secondary" onClick={RequestAccessToken}>Request Access Token</Button>
+            }
+        </>
+    );
+}
 
 
 
 function App() {
 
+        const { instance, accounts, inProgress } = useMsal();
+        const [accessToken, setAccessToken] = useState('');
+
+        const name = accounts[0] && accounts[0].name;
+
+        function RequestAccessToken() {
+            const request = {
+                ...loginRequest,
+                account: accounts[0]
+            };
+
+            // Silently acquires an access token which is then attached to a request for Microsoft Graph data
+            instance.acquireTokenSilent(request).then((response) => {
+                setAccessToken(response.accessToken);
+                console.log(accessToken)
+            }).catch((e) => {
+                instance.acquireTokenPopup(request).then((response) => {
+                    setAccessToken(response.accessToken);
+                });
+            });
+        }
+
     const [page, setPage] = useState('home')
+    const isAuthenticated = useIsAuthenticated();
 
     const body = {
         'grant_type': 'client_credentials',
@@ -51,19 +122,28 @@ function App() {
     useEffect( () => {
 
             const response: object[] = GetVirtualMachineLists()
-            getAuthToken()
-            console.log(response)
+            //getAuthToken()
+            //console.log(response)
         },[] )
 
     return (
         <div>
             <h1>Azure Dev Monitoring</h1>
-            <button onClick={() => setPage('home')}>Home</button>
-            <button onClick={() => setPage('virtualMachines')}>Virtual Machines</button>
-            <button onClick={() => setPage('appServices')}>App Services</button>
-            {page === 'home' && <Home />}
-            {page === 'virtualMachines' && <VirtualMachines />}
-            {page === 'appServices' && <AppService />}
+            { isAuthenticated ? <SignOutButton /> : <SignInButton /> }
+            <AuthenticatedTemplate>
+                <ProfileContent />
+                <button onClick={() => setPage('home')}>Home</button>
+                <button onClick={() => setPage('virtualMachines')}>Virtual Machines</button>
+                <button onClick={() => setPage('appServices')}>App Services</button>
+                {page === 'home' && <Home />}
+                {page === 'virtualMachines' && <VirtualMachines />}
+                {page === 'appServices' && <AppService />}
+            </AuthenticatedTemplate>
+            <UnauthenticatedTemplate>
+                <p>Please Sign In!</p>
+            </UnauthenticatedTemplate>
+
+
 
         </div>
 
