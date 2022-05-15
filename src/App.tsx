@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import GetVirtualMachineLists from "./main/virtualmachine/VirtualMachineList";
 import AppService from "./main/pages/AppService";
 import Home from "./main/pages/Home";
 import VirtualMachines from "./main/pages/VirtualMachines";
@@ -119,12 +118,7 @@ function App() {
     }
 
 
-    useEffect( () => {
 
-            const response: object[] = GetVirtualMachineLists()
-            //getAuthToken()
-            //console.log(response)
-        },[] )
 
     return (
         <div>
