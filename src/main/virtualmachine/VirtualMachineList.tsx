@@ -1,5 +1,5 @@
 import React from "react";
-import liveApiGetCall from "../utils/ApiHelper";
+import {liveApiGetCall} from "../utils/ApiHelper";
 import {
     NetworkInterface,
     VirtualMachineComplete,
