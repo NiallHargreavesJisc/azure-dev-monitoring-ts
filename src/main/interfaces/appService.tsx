@@ -1,16 +1,14 @@
-import {AppServicePlanProperties} from "./appServicePlan";
-
-export interface AppService {
+export interface IAppService {
 
     id: string
     name: string
     type: string
     kind: string
-    properties: AppServiceProperties
+    properties: IAppServiceProperties
 
 }
 
-export interface AppServiceProperties {
+export interface IAppServiceProperties {
     name: string
     state: string
     hostNames: string[]
