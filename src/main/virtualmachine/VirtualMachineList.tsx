@@ -1,5 +1,5 @@
 import React from "react";
-import {liveApiGetCall} from "../utils/ApiHelper";
+import {apiGetCall} from "../utils/ApiHelper";
 import {
     NetworkInterface,
     VirtualMachineComplete,
@@ -9,9 +9,9 @@ import {
 
 const virtualMachineList = async (): Promise<VirtualMachineComplete[]> => {
 
-        const virtualMachines: VirtualMachineResponse[] = await liveApiGetCall('https://management.azure.com/subscriptions/d87d8dde-ee41-4a1d-bb1f-baf4f54d644f/resourceGroups/RG_BuildResources/providers/Microsoft.Compute/virtualMachines?api-version=2020-06-01');
-        const virtualMachineProviders = await liveApiGetCall('https://management.azure.com/subscriptions/d87d8dde-ee41-4a1d-bb1f-baf4f54d644f/providers/Microsoft.Compute/virtualMachines?api-version=2020-12-01&statusOnly=true');
-        const networkInterfaces = await liveApiGetCall('https://management.azure.com/subscriptions/d87d8dde-ee41-4a1d-bb1f-baf4f54d644f/resourceGroups/RG_BuildResources/providers/Microsoft.Network/networkInterfaces?api-version=2020-11-01');
+        const virtualMachines: VirtualMachineResponse[] = await apiGetCall('/resourceGroups/RG_BuildResources/providers/Microsoft.Compute/virtualMachines?api-version=2020-06-01');
+        const virtualMachineProviders = await apiGetCall('/providers/Microsoft.Compute/virtualMachines?api-version=2020-12-01&statusOnly=true');
+        const networkInterfaces = await apiGetCall('/resourceGroups/RG_BuildResources/providers/Microsoft.Network/networkInterfaces?api-version=2020-11-01');
 
 
         // @ts-ignore
