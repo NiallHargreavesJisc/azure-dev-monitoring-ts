@@ -10,17 +10,17 @@ export const VirtualMachineRow = ({virtualMachine}: VirtualMachineRowProps) => {
     console.log('VM: ', virtualMachine)
     return (
         <tr>
-            <td>{virtualMachine.name}</td>
-            <td>{virtualMachine?.tags["Jenkins User"]}</td>
-            <td>{virtualMachine.powerState}</td>
-            <td>{virtualMachine.tags["created Date"]}</td>
-            <td>{virtualMachine.tags.Project}</td>
-            <td>{virtualMachine.tags.Branch}</td>
-            <td>{virtualMachine.ipAddress}</td>
-            <td>{virtualMachine.tags.Commit}</td>
-            <td>{virtualMachine.tags.Type}</td>
-            <td>{virtualMachine.tags.Status}</td>
-            <td>
+            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.name}</td>
+            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine?.tags["Jenkins User"]}</td>
+            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.powerState}</td>
+            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.tags["created Date"]}</td>
+            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.tags.Project}</td>
+            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.tags.Branch}</td>
+            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.ipAddress}</td>
+            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.tags.Commit}</td>
+            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.tags.Type}</td>
+            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.tags.Status}</td>
+            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
                 {virtualMachine.powerState === '**RUNNING!**' &&
                 <button onClick={() => {
                     changePowerState(virtualMachine, 'deallocate')
