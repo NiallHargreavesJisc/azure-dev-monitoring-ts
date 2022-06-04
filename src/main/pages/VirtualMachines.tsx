@@ -2,21 +2,20 @@ import React, {useEffect, useState} from "react";
 import '../../App.css'
 import virtualMachineList from "../virtualmachine/VirtualMachineList";
 import {VirtualMachineComplete} from "../interfaces/virtualMachine";
-import {VirtualMachineRow} from "../../components/VirtualMachineRow";
+import FullVmListTable from "../../components/FullVirtualMachineTable";
+import UserVirtualMachineTable from "../../components/UserVirtualMachineTable";
+import JiraVirtualMachineTable from "../../components/JiraVirtualMachineTable";
 
 const VirtualMachines = () => {
 
+    const [view, setView] = useState('all')
     const [vmList, setVmList] = useState<VirtualMachineComplete[]>([])
-    let [runningVms, setRunningVms] = useState<number>(0)
+
 
     useEffect( () => {
         const fetchData = async () => {
             const vms = await virtualMachineList()
             setVmList(vms)
-
-            const running = vms.filter(virtualMachine =>virtualMachine.powerState === '**RUNNING!**' )
-            setRunningVms(running.length)
-
         }
         fetchData();
         // @ts-ignore
@@ -26,45 +25,22 @@ const VirtualMachines = () => {
     return (
         <div>
             <h1>Virtual Machines</h1>
-            <h2>There are {vmList.length}  virtual machines with {runningVms} running.</h2>
-            <table>
-                <thead className="bg-gray-50">
-                <tr>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Vm Name</th>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Vm Owner</th>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Power State</th>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Created Date</th>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Project</th>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Branch</th>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">IP Address</th>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Commit ID</th>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Type</th>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Vm Status</th>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Change Power State</th>
-                    <th scope="col"
-                        className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Delete</th>
-                </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                {vmList.length > 0 && vmList.map(virtualMachine => {
-                        return (
-                            <VirtualMachineRow virtualMachine = {virtualMachine} />
-                        )
-                    }
-                )}
-                </tbody>
-            </table>
+            <span className="relative z-0 inline-flex shadow-sm rounded-md">
+                    <button onClick={() => setView('all')} type="button"
+                            className="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    >All VMs</button>
+                    <button onClick={() => setView('user')} type="button"
+                            className="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    >VMs by User</button>
+                    <button onClick={() => setView('branch')} type="button"
+                            className="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                    >VMs by Branch</button>
+                </span>
+
+            {view === 'all' && <FullVmListTable vmList={vmList}/>}
+            {view === 'user' && <UserVirtualMachineTable vmList={vmList}/>}
+            {view === 'branch' && <JiraVirtualMachineTable vmList={vmList}/>}
+
 
         </div>
 

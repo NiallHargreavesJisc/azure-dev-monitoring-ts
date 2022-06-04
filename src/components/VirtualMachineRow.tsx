@@ -1,13 +1,38 @@
-import React from "react";
+import React, {useState} from "react";
 import {VirtualMachineComplete} from "../main/interfaces/virtualMachine";
 import {changePowerState, deleteVirtualMachine} from "../main/utils/ApiHelper";
+import DeletionAlert from "./DeletionAlert";
 
 interface VirtualMachineRowProps {
     virtualMachine: VirtualMachineComplete
 }
 
+
+
+
+
+
 export const VirtualMachineRow = ({virtualMachine}: VirtualMachineRowProps) => {
-    console.log('VM: ', virtualMachine)
+
+    const [showDeletionConfirmationBox, setshowDeletionConfirmationBox] = useState(false)
+
+    const deleteConfimation = (virtualMachine: VirtualMachineComplete) => {
+
+        console.log(virtualMachine.name)
+
+        setshowDeletionConfirmationBox(true)
+
+        console.log(showDeletionConfirmationBox)
+
+        return(
+            <div>
+                {showDeletionConfirmationBox === true && <DeletionAlert showDeletionConfirmationBox={showDeletionConfirmationBox} virtualMachine = {virtualMachine}/>}
+            </div>
+        )
+    }
+
+
+    //const date = dateFormatter(virtualMachine.tags["created Date"])
     return (
         <tr>
             <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.name}</td>
@@ -36,8 +61,9 @@ export const VirtualMachineRow = ({virtualMachine}: VirtualMachineRowProps) => {
 
             </td>
             <button onClick={() => {
-                deleteVirtualMachine(virtualMachine)
+                deleteConfimation(virtualMachine)
             }}>Delete</button>
         </tr>
+    
     )
 }
