@@ -38,7 +38,7 @@ const VirtualMachineTable = ({vmList}: virtualMachineTableParams) => {
             <tbody className="divide-y divide-gray-200 bg-white">
             {vmList.length > 0 && vmList.map(virtualMachine => {
                     return (
-                        <VirtualMachineRow virtualMachine = {virtualMachine} />
+                        <VirtualMachineRow virtualMachine = {virtualMachine} key={virtualMachine.id} />
                     )
                 }
             )}

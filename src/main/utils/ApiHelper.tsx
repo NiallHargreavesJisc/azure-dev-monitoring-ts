@@ -26,7 +26,6 @@ export const apiGetCall = async (url: string, environment: string = 'live') => {
     }
 
     const exUrl = constructUrl(url, environment)
-    console.log(`EXURL: ${exUrl}`)
 
     let responseJson: any = []
 
@@ -102,7 +101,6 @@ export const deleteVirtualMachine = async (vm: VirtualMachineComplete) => {
     }
 
     const url = 'https://management.azure.com/subscriptions/d87d8dde-ee41-4a1d-bb1f-baf4f54d644f/resourceGroups/RG_BuildResources/providers/Microsoft.Compute/virtualMachines/' + vmName + '/?api-version=2020-12-01'
-
 
     await axios.delete(url, axiosConfig)
         .then(function (response: any) {
