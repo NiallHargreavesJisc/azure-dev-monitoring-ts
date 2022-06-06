@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {VirtualMachineComplete} from "../main/interfaces/virtualMachine";
 import {changePowerState} from "../main/utils/ApiHelper";
 import DeletionAlert from "./DeletionAlert";
+import moment from 'moment';
 
 interface VirtualMachineRowProps {
     virtualMachine: VirtualMachineComplete
@@ -9,10 +10,18 @@ interface VirtualMachineRowProps {
 
 export const VirtualMachineRow = ({virtualMachine}: VirtualMachineRowProps) => {
 
-    const [deletionAlert, setDeletionAlert] = useState(false)
+
+    const [deletionAlert, setDeletionAlert] = useState<boolean>(false)
 
     const deleteConfimationBox = () => {
         setDeletionAlert(true)
+    }
+
+    const dateFormat = (date: string) => {
+        const ISODate = date && `${date.substring(0,4)}-${date.substring(4,6)}-${date.substring(6,8)}`
+        console.log(ISODate)
+        const m = moment(ISODate)
+        return m.format('Do MMM YYYY')
     }
 
     return (
@@ -21,7 +30,7 @@ export const VirtualMachineRow = ({virtualMachine}: VirtualMachineRowProps) => {
                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.name}</td>
                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine?.tags["Jenkins User"]}</td>
                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.powerState}</td>
-                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.tags["created Date"]}</td>
+                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{dateFormat(virtualMachine.tags["created Date"])}</td>
                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.tags.Project}</td>
                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.tags.Branch}</td>
                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">{virtualMachine.ipAddress}</td>

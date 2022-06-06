@@ -12,7 +12,7 @@ export interface VirtualMachineComplete extends VirtualMachineResponse {
 }
 
 export interface VirtualMachineTags {
-    'created Date': Date
+    'created Date': string
     'Jenkins User': string
     Commit: string
     Type: string
